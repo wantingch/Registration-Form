@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', function() {
+let count=1
+document.addEventListener('DOMContentLoaded', function() {  
     document.getElementById('add').addEventListener('click', addParticipant);
     document.querySelector('form').addEventListener('submit', submitForm);
 });
@@ -6,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
 function addParticipant() {
     let original = document.querySelector('.participant1');
     let clone = original.cloneNode(true);
+    count++
+    clone.querySelector('#count').innerHTML=count
     clone.querySelector('#fname').value = "";
     clone.querySelector('#activity').value = "";
     clone.querySelector('#fee').value = "";
@@ -14,20 +17,41 @@ function addParticipant() {
 }
 
 function submitForm(event) {
-    event.preventDefault(); // Prevent form submission
+    event.preventDefault(); 
     if (validateForm()) {
-        displaySummary();
+        displaySummary()
+        let form=document.getElementById('form')
+        form.style.display='none'
     } else {
         alert("Please fill all required fields.");
     }
 }
 
 function validateForm() {
-    // Validate inputs and return true if all are valid
-    return true; // Example validation always passes
+    return true;
 }
 
 function displaySummary() {
-    let summary = "Registration successful!";
-    document.getElementById('summary').textContent = summary;
+    const total = totalFees()
+    let adultname = document.getElementById('adult_name').value
+    let template = successtemplate({name:adultname, fee:total})
+    document.getElementById('summary').innerHTML = template
+
 }
+
+function totalFees() {
+    let feeElements = document.querySelectorAll("[id^=fee]");  
+    feeElements = [...feeElements];
+    console.log (feeElements[0].value)
+    const total = feeElements.reduce((sum,element) => {
+        console.log(element.value)
+        console.log(element)
+        return sum+parseInt(element.value)
+    }, 0)
+    return total
+}
+
+function successtemplate(info) {
+    return `<h1>Thank you ${info.name} for registering. You have registered ${count} participants and owe $${info.fee} in Fees.</h1>`
+}
+
