@@ -7,14 +7,16 @@ document.addEventListener('DOMContentLoaded', function() {
 function addParticipant() {
     let original = document.querySelector('.participant1');
     let clone = original.cloneNode(true);
-    count++
-    clone.querySelector('#count').innerHTML=count
+    count++;
+    clone.querySelector('#count').textContent = count; // Update participant count display
     clone.querySelector('#fname').value = "";
     clone.querySelector('#activity').value = "";
-    clone.querySelector('#fee').value = "";
+    clone.querySelector('#fee').className = "fee"; // Ensure the fee input has a class for easy selection
     clone.querySelector('#date').value = "";
+    clone.id = `participant${count}`; // Assign unique ID to cloned section
     document.querySelector('.participants').appendChild(clone);
 }
+
 
 function submitForm(event) {
     event.preventDefault(); 
@@ -32,26 +34,20 @@ function validateForm() {
 }
 
 function displaySummary() {
-    const total = totalFees()
-    let adultname = document.getElementById('adult_name').value
-    let template = successtemplate({name:adultname, fee:total})
-    document.getElementById('summary').innerHTML = template
-
+    const total = totalFees();
+    let adultname = document.getElementById('adult_name').value;
+    let template = successtemplate({name: adultname, fee: total}, count);
+    document.getElementById('summary').innerHTML = template;
 }
+
 
 function totalFees() {
-    let feeElements = document.querySelectorAll("[id^=fee]");  
-    feeElements = [...feeElements];
-    console.log (feeElements[0].value)
-    const total = feeElements.reduce((sum,element) => {
-        console.log(element.value)
-        console.log(element)
-        return sum+parseInt(element.value)
-    }, 0)
-    return total
+    // Using a class-based selector if IDs are not unique
+    let feeElements = document.querySelectorAll(".fee");
+    feeElements = Array.from(feeElements); // Convert NodeList to Array
+    const total = feeElements.reduce((sum, element) => sum + (parseInt(element.value) || 0), 0);
+    return total;
 }
 
-function successtemplate(info) {
-    return `<h1>Thank you ${info.name} for registering. You have registered ${count} participants and owe $${info.fee} in Fees.</h1>`
-}
+import { successtemplate } from './Templates.js';
 
