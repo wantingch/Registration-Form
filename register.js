@@ -8,12 +8,12 @@ function addParticipant() {
     let original = document.querySelector('.participant1');
     let clone = original.cloneNode(true);
     count++;
-    clone.querySelector('#count').textContent = count; // Update participant count display
+    clone.querySelector('#count').textContent = count; 
     clone.querySelector('#fname').value = "";
     clone.querySelector('#activity').value = "";
-    clone.querySelector('#fee').className = "fee"; // Ensure the fee input has a class for easy selection
+    clone.querySelector('#fee').className = "fee"; 
     clone.querySelector('#date').value = "";
-    clone.id = `participant${count}`; // Assign unique ID to cloned section
+    clone.id = `participant${count}`; 
     document.querySelector('.participants').appendChild(clone);
 }
 
@@ -42,10 +42,14 @@ function displaySummary() {
 
 
 function totalFees() {
-    // Using a class-based selector if IDs are not unique
-    let feeElements = document.querySelectorAll(".fee");
-    feeElements = Array.from(feeElements); // Convert NodeList to Array
-    const total = feeElements.reduce((sum, element) => sum + (parseInt(element.value) || 0), 0);
+    let feeElements = document.querySelectorAll("input[id^='fee']"); 
+    let total = 0;
+    feeElements.forEach(element => {
+        let feeValue = parseInt(element.value);
+        if (!isNaN(feeValue)) { 
+            total += feeValue;
+        }
+    });
     return total;
 }
 
