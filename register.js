@@ -14,6 +14,7 @@ function addParticipant() {
     clone.querySelector('#fname').value = "";
     clone.querySelector('#activity').value = "";
     clone.querySelector('#fee').className = "fee";
+    clone.querySelector('#fee').value = "";
     clone.querySelector('#date').value = "";
     clone.id = `participant${count}`;
     
